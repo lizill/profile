@@ -1,0 +1,36 @@
+---
+interface Props {
+  href?: string;
+  label: string;
+  size?: "sm" | "md";
+}
+
+const { href = "#hero", label, size = "md" } = Astro.props;
+const markClass = size === "sm" ? "h-7 w-7" : "h-9 w-9";
+const textClass =
+  size === "sm" ? "font-display text-sm font-extrabold" : "font-display text-xl font-extrabold";
+---
+
+<a href={href} class="flex items-center gap-2.5" aria-label={label}>
+  <span class:list={["inline-flex shrink-0 items-center justify-center", markClass]} aria-hidden="true">
+    <svg class="h-full w-full" viewBox="0 0 40 40" fill="none">
+      <rect x="4" y="4" width="32" height="32" rx="8" class="fill-brand-600" />
+      <path
+        d="M14 29V12h8.5c4.2 0 7 2.5 7 6.5s-2.8 6.5-7 6.5H18"
+        stroke="white"
+        stroke-width="3.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M27 29l4-4"
+        class="stroke-brand-100"
+        stroke-width="3.4"
+        stroke-linecap="round"
+      />
+    </svg>
+  </span>
+  <span class:list={[textClass, size === "sm" ? "text-white" : undefined]}>
+    PARK<span class={size === "sm" ? "text-brand-500" : "text-brand-600"}>.</span>
+  </span>
+</a>

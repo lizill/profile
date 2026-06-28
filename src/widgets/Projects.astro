@@ -1,0 +1,70 @@
+---
+import type { Project } from "@/entities/project/types";
+import type { Dictionary } from "@/shared/i18n/types";
+import InlineRichText from "@/shared/ui/InlineRichText.astro";
+import SectionEyebrow from "@/shared/ui/SectionEyebrow.astro";
+
+interface Props {
+  dictionary: Dictionary;
+  projects: Project[];
+}
+
+const { dictionary, projects } = Astro.props;
+const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
+---
+
+<section id="projects" class="mx-auto max-w-7xl px-6 py-24 sm:px-10 lg:px-16">
+  <div class="reveal flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <SectionEyebrow
+        label={dictionary.sections.projects.eyebrow}
+        richText={dictionary.sections.projects.eyebrowRichText}
+      />
+      <h2 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <InlineRichText
+          value={dictionary.sections.projects.titleRichText ?? dictionary.sections.projects.title}
+          allowLinks={false}
+        />
+      </h2>
+    </div>
+    <p class="text-sm text-slate-400">
+      <InlineRichText value={dictionary.sections.projects.helperRichText ?? dictionary.sections.projects.helper} />
+    </p>
+  </div>
+
+  <div class="reveal mt-8 -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-8 pt-6 scroll-pl-6 sm:-mx-10 sm:px-10 sm:scroll-pl-10 lg:-mx-16 lg:px-16 lg:scroll-pl-16">
+    {
+      sortedProjects.map((project) => (
+        <article class="group w-[300px] shrink-0 snap-start overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60 sm:w-[340px]">
+          <div
+            class:list={[
+              "relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br",
+              project.accentClass,
+            ]}
+          >
+            <span class="font-display text-5xl font-extrabold text-white/90">
+              {String(project.order).padStart(2, "0")}
+            </span>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-lg font-bold">
+              <InlineRichText value={project.titleRichText ?? project.title} allowLinks={false} />
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              <InlineRichText value={project.descriptionRichText ?? project.description} />
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              {
+                project.tags.map((tag) => (
+                  <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                    {tag}
+                  </span>
+                ))
+              }
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

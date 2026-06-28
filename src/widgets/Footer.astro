@@ -1,0 +1,20 @@
+---
+import type { Dictionary } from "@/shared/i18n/types";
+import InlineRichText from "@/shared/ui/InlineRichText.astro";
+import Logo from "@/shared/ui/Logo.astro";
+
+interface Props {
+  dictionary: Dictionary;
+}
+
+const { dictionary } = Astro.props;
+---
+
+<footer class="bg-ink pb-10 text-slate-400">
+  <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/10 px-6 pt-8 sm:flex-row sm:px-10 lg:px-16">
+    <Logo href="#hero" label={dictionary.nav.homeAriaLabel} size="sm" />
+    <p class="text-xs">
+      <InlineRichText value={dictionary.footer.copyrightRichText ?? dictionary.footer.copyright} allowLinks={false} />
+    </p>
+  </div>
+</footer>

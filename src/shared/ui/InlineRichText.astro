@@ -1,0 +1,89 @@
+---
+import type { RichTextSegment, RichTextValue } from "@/shared/rich-text/types";
+
+interface Props {
+  value: RichTextValue;
+  allowLinks?: boolean;
+  boldClass?: string;
+  linkClass?: string;
+}
+
+const {
+  value,
+  allowLinks = true,
+  boldClass = "font-semibold",
+  linkClass = "underline decoration-current/30 underline-offset-4 transition hover:decoration-current",
+} = Astro.props;
+const segments = normalizeRichText(value);
+
+const colorClasses: Record<string, string> = {
+  gray: "text-slate-500",
+  brown: "text-amber-900",
+  orange: "text-orange-600",
+  yellow: "text-yellow-600",
+  green: "text-emerald-600",
+  blue: "text-brand-600",
+  purple: "text-violet-600",
+  pink: "text-pink-600",
+  red: "text-rose-600",
+  gray_background: "rounded-sm bg-slate-100 px-0.5",
+  brown_background: "rounded-sm bg-amber-100 px-0.5",
+  orange_background: "rounded-sm bg-orange-100 px-0.5",
+  yellow_background: "rounded-sm bg-yellow-100 px-0.5",
+  green_background: "rounded-sm bg-emerald-100 px-0.5",
+  blue_background: "rounded-sm bg-sky-100 px-0.5",
+  purple_background: "rounded-sm bg-violet-100 px-0.5",
+  pink_background: "rounded-sm bg-pink-100 px-0.5",
+  red_background: "rounded-sm bg-rose-100 px-0.5",
+};
+
+function normalizeRichText(value: RichTextValue): RichTextSegment[] {
+  if (!value) {
+    return [];
+  }
+
+  if (typeof value === "string") {
+    return [{ text: value }];
+  }
+
+  return value.filter((segment) => segment.text.length > 0);
+}
+
+function segmentClasses(segment: RichTextSegment): string[] {
+  const annotations = segment.annotations ?? {};
+  const classes = [
+    annotations.bold ? boldClass : undefined,
+    annotations.italic ? "italic" : undefined,
+    annotations.strikethrough ? "line-through" : undefined,
+    annotations.underline ? "underline underline-offset-4" : undefined,
+    annotations.code ? "rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.95em] text-slate-700" : undefined,
+    annotations.color ? colorClasses[annotations.color] : undefined,
+  ];
+
+  return classes.filter((className): className is string => Boolean(className));
+}
+
+function isExternalLink(href: string): boolean {
+  return href.startsWith("http://") || href.startsWith("https://");
+}
+---
+
+{
+  segments.map((segment) => {
+    const classes = segmentClasses(segment);
+    const href = allowLinks ? segment.href : undefined;
+
+    return href ? (
+      <a
+        href={href}
+        target={isExternalLink(href) ? "_blank" : undefined}
+        rel={isExternalLink(href) ? "noopener noreferrer" : undefined}
+        class:list={[...classes, linkClass]}
+      >
+        {segment.text}
+      </a>
+    ) : (
+      <span class:list={classes}>{segment.text}</span>
+    );
+  })
+}

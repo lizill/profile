@@ -1,0 +1,807 @@
+<!doctype html>
+<html class="staticrypt-html" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>PARK. Private Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <link
+      rel="icon"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="%234f46e5"/><text x="32" y="42" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="white">P</text></svg>'
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --brand-50: #eef0ff;
+        --brand-600: #4f46e5;
+        --brand-700: #4338ca;
+        --ink: #15132b;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-500: #64748b;
+        --slate-700: #334155;
+        --white: #ffffff;
+        --font-sans: "Noto Sans", "Noto Sans KR", "Noto Sans JP", sans-serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      .staticrypt-html,
+      .staticrypt-body {
+        min-height: 100%;
+      }
+
+      .staticrypt-body {
+        margin: 0;
+        background: var(--white);
+        color: var(--ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .staticrypt-content {
+        min-height: 100vh;
+        background: var(--white);
+      }
+
+      .staticrypt-shell {
+        display: grid;
+        min-height: 100vh;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 0.92fr);
+      }
+
+      .staticrypt-main {
+        position: relative;
+        display: grid;
+        min-height: 100vh;
+        align-items: center;
+        justify-items: start;
+        padding: 96px 64px;
+      }
+
+      .staticrypt-brand {
+        position: absolute;
+        left: 64px;
+        top: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .staticrypt-brand-mark {
+        display: inline-flex;
+        width: 36px;
+        height: 36px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .staticrypt-brand-mark svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .staticrypt-brand-dot {
+        color: var(--brand-600);
+      }
+
+      .staticrypt-panel {
+        width: min(100%, 560px);
+      }
+
+      .staticrypt-kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 24px;
+        color: var(--brand-600);
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .staticrypt-kicker::before {
+        display: block;
+        width: 48px;
+        height: 1px;
+        background: var(--brand-600);
+        content: "";
+      }
+
+      .staticrypt-title {
+        margin: 0;
+        max-width: 520px;
+        font-size: 56px;
+        font-weight: 800;
+        line-height: 1.1;
+      }
+
+      .staticrypt-description {
+        margin: 24px 0 0;
+        max-width: 520px;
+        color: var(--slate-500);
+        font-size: 18px;
+        line-height: 1.7;
+        word-break: keep-all;
+      }
+
+      .staticrypt-form {
+        margin-top: 36px;
+        max-width: 440px;
+      }
+
+      .staticrypt-username-field {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .staticrypt-password-label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--slate-700);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .staticrypt-password-container {
+        display: flex;
+        height: 54px;
+        align-items: center;
+        border: 1px solid var(--slate-200);
+        border-radius: 999px;
+        background: #f8fafc;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease,
+          background-color 0.2s ease;
+      }
+
+      .staticrypt-password-container:focus-within {
+        border-color: var(--brand-600);
+        background: var(--white);
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+      }
+
+      .staticrypt-password-container input {
+        min-width: 0;
+        flex: 1;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 16px;
+        outline: 0;
+        padding: 0 0 0 22px;
+      }
+
+      .staticrypt-password-container input::placeholder {
+        color: #94a3b8;
+      }
+
+      .staticrypt-toggle-password-visibility {
+        display: inline-flex;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        margin-right: 5px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--slate-500);
+        cursor: pointer;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .staticrypt-toggle-password-visibility:hover,
+      .staticrypt-toggle-password-visibility:focus-visible {
+        background: var(--brand-50);
+        color: var(--brand-600);
+        outline: 0;
+      }
+
+      .staticrypt-toggle-password-visibility svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .staticrypt-row {
+        display: flex;
+        min-height: 24px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 14px;
+      }
+
+      .staticrypt-error {
+        margin: 0;
+        color: #dc2626;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .staticrypt-remember {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--slate-500);
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .staticrypt-remember input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--brand-600);
+      }
+
+      .staticrypt-decrypt-button {
+        display: inline-flex;
+        width: 100%;
+        height: 54px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 22px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--brand-600);
+        color: var(--white);
+        cursor: pointer;
+        font: inherit;
+        font-size: 15px;
+        font-weight: 800;
+        box-shadow: 0 18px 42px rgba(79, 70, 229, 0.24);
+        transition:
+          background-color 0.2s ease,
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .staticrypt-decrypt-button:hover,
+      .staticrypt-decrypt-button:focus-visible {
+        background: var(--brand-700);
+        box-shadow: 0 20px 48px rgba(79, 70, 229, 0.28);
+        outline: 0;
+        transform: translateY(-1px);
+      }
+
+      .staticrypt-decrypt-button:disabled {
+        cursor: progress;
+        opacity: 0.76;
+        transform: none;
+      }
+
+      .staticrypt-decrypt-button svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .staticrypt-visual {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.32), transparent 38%),
+          linear-gradient(135deg, #4f46e5 0%, #2563eb 52%, #7c3aed 100%);
+      }
+
+      .staticrypt-ring {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 416px;
+        height: 416px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        transform: translate(-50%, -50%);
+      }
+
+      .staticrypt-diamond {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 288px;
+        height: 288px;
+        border: 2px solid rgba(255, 255, 255, 0.22);
+        border-radius: 40px;
+        transform: translate(-50%, -50%) rotate(18deg);
+      }
+
+      .staticrypt-code {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: flex;
+        width: 160px;
+        height: 160px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .staticrypt-shape {
+        position: absolute;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+      }
+
+      .staticrypt-shape-a {
+        left: 26%;
+        top: 24%;
+        width: 96px;
+        height: 96px;
+        border-radius: 28px;
+        background: rgba(249, 168, 212, 0.9);
+      }
+
+      .staticrypt-shape-b {
+        right: 24%;
+        top: 30%;
+        width: 80px;
+        height: 80px;
+        border-radius: 22px;
+        background: #fbbf24;
+      }
+
+      .staticrypt-shape-c {
+        left: 30%;
+        bottom: 27%;
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        background: #7dd3fc;
+      }
+
+      .staticrypt-shape-d {
+        right: 30%;
+        bottom: 25%;
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .staticrypt-spinner-container {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .staticrypt-spinner {
+        width: 34px;
+        height: 34px;
+        border: 4px solid var(--slate-200);
+        border-right-color: var(--brand-600);
+        border-radius: 999px;
+        animation: staticrypt-spinner 0.75s linear infinite;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      @keyframes staticrypt-spinner {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 920px) {
+        .staticrypt-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .staticrypt-main {
+          display: block;
+          min-height: auto;
+          padding: 96px 24px 44px;
+        }
+
+        .staticrypt-brand {
+          left: 24px;
+          top: 24px;
+        }
+
+        .staticrypt-title {
+          font-size: 42px;
+        }
+
+        .staticrypt-description {
+          font-size: 16px;
+        }
+
+        .staticrypt-form {
+          max-width: none;
+        }
+
+        .staticrypt-visual {
+          order: -1;
+          min-height: 260px;
+        }
+
+        .staticrypt-code {
+          width: 116px;
+          height: 116px;
+          border-radius: 24px;
+          font-size: 40px;
+        }
+
+        .staticrypt-diamond {
+          width: 210px;
+          height: 210px;
+          border-radius: 32px;
+        }
+
+        .staticrypt-ring {
+          width: 300px;
+          height: 300px;
+        }
+
+        .staticrypt-shape-a {
+          left: 18%;
+          top: 18%;
+          width: 66px;
+          height: 66px;
+        }
+
+        .staticrypt-shape-b {
+          right: 17%;
+          top: 26%;
+          width: 58px;
+          height: 58px;
+        }
+
+        .staticrypt-shape-c {
+          left: 24%;
+          bottom: 20%;
+          width: 52px;
+          height: 52px;
+        }
+
+        .staticrypt-shape-d {
+          right: 24%;
+          bottom: 18%;
+          width: 44px;
+          height: 44px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .staticrypt-main {
+          padding: 88px 20px 36px;
+        }
+
+        .staticrypt-brand {
+          left: 20px;
+        }
+
+        .staticrypt-title {
+          font-size: 34px;
+        }
+
+        .staticrypt-row {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .staticrypt-visual {
+          min-height: 220px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .staticrypt-spinner,
+        .staticrypt-decrypt-button {
+          animation: none;
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="staticrypt-body">
+    <div id="staticrypt_loading" class="staticrypt-spinner-container" aria-label="Loading">
+      <div class="staticrypt-spinner"></div>
+    </div>
+
+    <div id="staticrypt_content" class="staticrypt-content hidden">
+      <div class="staticrypt-shell">
+        <main class="staticrypt-main">
+          <div class="staticrypt-brand" aria-label="PARK.">
+            <span class="staticrypt-brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" fill="none">
+                <rect x="4" y="4" width="32" height="32" rx="8" fill="#4f46e5" />
+                <path
+                  d="M14 29V12h8.5c4.2 0 7 2.5 7 6.5s-2.8 6.5-7 6.5H18"
+                  stroke="white"
+                  stroke-width="3.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M27 29l4-4"
+                  stroke="#e0e3ff"
+                  stroke-width="3.4"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+            <span>PARK<span class="staticrypt-brand-dot">.</span></span>
+          </div>
+
+          <section class="staticrypt-panel" aria-labelledby="staticrypt-title">
+            <p class="staticrypt-kicker" data-i18n="kicker">PARK DONGHYEON</p>
+            <h1 id="staticrypt-title" class="staticrypt-title" data-i18n="title">비공개 접근</h1>
+            <p id="staticrypt-help" class="staticrypt-description" data-i18n="description">
+              프로필 페이지를 보려면 공유받은 비밀번호를 입력해 주세요.
+            </p>
+
+            <form id="staticrypt-form" class="staticrypt-form" action="#" method="post">
+              <input
+                class="staticrypt-username-field"
+                type="text"
+                name="username"
+                value="PARK"
+                autocomplete="username"
+                hidden
+              />
+              <label id="staticrypt-password-label" class="staticrypt-password-label" for="staticrypt-password" data-i18n="passwordLabel">
+                비밀번호
+              </label>
+              <div class="staticrypt-password-container">
+                <input
+                  id="staticrypt-password"
+                  type="password"
+                  name="password"
+                  placeholder="비밀번호 입력"
+                  autocomplete="current-password"
+                  aria-describedby="staticrypt-help staticrypt-error"
+                  autofocus
+                  data-i18n-placeholder="passwordPlaceholder"
+                />
+                <button
+                  class="staticrypt-toggle-password-visibility"
+                  type="button"
+                  aria-label="비밀번호 보기"
+                  data-i18n-aria="showPassword"
+                >
+                  <svg class="staticrypt-eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M3 3l18 18" />
+                    <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                    <path d="M9.9 4.2A10.4 10.4 0 0 1 12 4c5 0 8.6 3.1 10 8a11.8 11.8 0 0 1-3 4.7" />
+                    <path d="M6.6 6.6A11.6 11.6 0 0 0 2 12c1.4 4.9 5 8 10 8 1.5 0 2.9-.3 4.1-.8" />
+                  </svg>
+                  <svg class="staticrypt-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+                    <path d="M2 12c1.4-4.9 5-8 10-8s8.6 3.1 10 8c-1.4 4.9-5 8-10 8s-8.6-3.1-10-8Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="staticrypt-row">
+                <p id="staticrypt-error" class="staticrypt-error" role="alert" aria-live="polite"></p>
+                <label id="staticrypt-remember-label" class="staticrypt-remember hidden">
+                  <input id="staticrypt-remember" type="checkbox" name="remember" />
+                  <span data-i18n="rememberLabel">이 브라우저에서 기억</span>
+                </label>
+              </div>
+
+              <button id="staticrypt-submit" type="submit" class="staticrypt-decrypt-button">
+                <span data-i18n="submit">입장하기</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </button>
+            </form>
+          </section>
+        </main>
+
+        <aside class="staticrypt-visual" aria-hidden="true">
+          <div class="staticrypt-ring"></div>
+          <div class="staticrypt-diamond"></div>
+          <div class="staticrypt-shape staticrypt-shape-a"></div>
+          <div class="staticrypt-shape staticrypt-shape-b"></div>
+          <div class="staticrypt-shape staticrypt-shape-c"></div>
+          <div class="staticrypt-shape staticrypt-shape-d"></div>
+          <div class="staticrypt-code">&lt;/&gt;</div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      const staticryptInitiator = /*[|js_staticrypt|]*/ 0;
+      const isRememberEnabled = /*[|is_remember_enabled|]*/ 0,
+        staticryptConfig = /*[|staticrypt_config|]*/ 0;
+
+      const copies = {
+        ko: {
+          title: "비공개 접근",
+          documentTitle: "비공개 접근 | PARK.",
+          kicker: "PARK DONGHYEON",
+          description: "프로필 페이지를 보려면 공유받은 비밀번호를 입력해 주세요.",
+          passwordLabel: "비밀번호",
+          passwordPlaceholder: "비밀번호 입력",
+          rememberLabel: "이 브라우저에서 기억",
+          submit: "입장하기",
+          checking: "확인 중",
+          error: "비밀번호가 올바르지 않습니다.",
+          showPassword: "비밀번호 보기",
+          hidePassword: "비밀번호 숨기기",
+        },
+        ja: {
+          title: "限定アクセス",
+          documentTitle: "限定アクセス | PARK.",
+          kicker: "PARK DONGHYEON",
+          description: "プロフィールページを見るには、共有されたパスワードを入力してください。",
+          passwordLabel: "パスワード",
+          passwordPlaceholder: "パスワードを入力",
+          rememberLabel: "このブラウザで記憶",
+          submit: "入室する",
+          checking: "確認中",
+          error: "パスワードが正しくありません。",
+          showPassword: "パスワードを表示",
+          hidePassword: "パスワードを隠す",
+        },
+        en: {
+          title: "Private Access",
+          documentTitle: "Private Access | PARK.",
+          kicker: "PARK DONGHYEON",
+          description: "Enter the shared password to view this profile page.",
+          passwordLabel: "Password",
+          passwordPlaceholder: "Enter password",
+          rememberLabel: "Remember this browser",
+          submit: "Enter",
+          checking: "Checking",
+          error: "The password is incorrect.",
+          showPassword: "Show password",
+          hidePassword: "Hide password",
+        },
+      };
+
+      function getLocale() {
+        const path = window.location.pathname;
+
+        if (/(^|\/)ja(\/|$)/.test(path)) {
+          return "ja";
+        }
+
+        if (/(^|\/)en(\/|$)/.test(path)) {
+          return "en";
+        }
+
+        return "ko";
+      }
+
+      const locale = getLocale();
+      const copy = copies[locale];
+      document.documentElement.lang = locale;
+      document.title = copy.documentTitle;
+
+      const templateConfig = {
+        rememberExpirationKey: "staticrypt_expiration",
+        rememberPassphraseKey: "staticrypt_passphrase",
+        replaceHtmlCallback: null,
+        clearLocalStorageCallback: null,
+      };
+
+      const staticrypt = staticryptInitiator.init(staticryptConfig, templateConfig);
+      const passwordInput = document.getElementById("staticrypt-password");
+      const errorElement = document.getElementById("staticrypt-error");
+      const submitButton = document.getElementById("staticrypt-submit");
+      const submitText = submitButton.querySelector("[data-i18n='submit']");
+      const rememberInput = document.getElementById("staticrypt-remember");
+      const toggleButton = document.querySelector(".staticrypt-toggle-password-visibility");
+      const closedEye = document.querySelector(".staticrypt-eye-closed");
+      const openEye = document.querySelector(".staticrypt-eye-open");
+
+      function applyCopy() {
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.getAttribute("data-i18n");
+          element.textContent = copy[key] || "";
+        });
+
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+          const key = element.getAttribute("data-i18n-placeholder");
+          element.setAttribute("placeholder", copy[key] || "");
+        });
+
+        document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+          const key = element.getAttribute("data-i18n-aria");
+          element.setAttribute("aria-label", copy[key] || "");
+        });
+      }
+
+      function showError(message) {
+        errorElement.textContent = message;
+      }
+
+      function setPending(isPending) {
+        submitButton.disabled = isPending;
+        submitText.textContent = isPending ? copy.checking : copy.submit;
+      }
+
+      applyCopy();
+
+      window.onload = async function () {
+        const { isSuccessful } = await staticrypt.handleDecryptOnLoad();
+
+        if (!isSuccessful) {
+          document.getElementById("staticrypt_loading").classList.add("hidden");
+          document.getElementById("staticrypt_content").classList.remove("hidden");
+          passwordInput.focus();
+
+          if (isRememberEnabled) {
+            document.getElementById("staticrypt-remember-label").classList.remove("hidden");
+          }
+        }
+      };
+
+      toggleButton.addEventListener("click", function () {
+        const shouldShow = passwordInput.type === "password";
+        passwordInput.type = shouldShow ? "text" : "password";
+        closedEye.hidden = shouldShow;
+        openEye.hidden = !shouldShow;
+        toggleButton.setAttribute("aria-label", shouldShow ? copy.hidePassword : copy.showPassword);
+        passwordInput.focus();
+      });
+
+      document.getElementById("staticrypt-form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        showError("");
+        setPending(true);
+
+        const { isSuccessful } = await staticrypt.handleDecryptionOfPage(passwordInput.value, rememberInput.checked);
+
+        if (!isSuccessful) {
+          setPending(false);
+          showError(copy.error);
+          passwordInput.select();
+        }
+      });
+    </script>
+  </body>
+</html>

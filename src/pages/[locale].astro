@@ -1,0 +1,23 @@
+---
+import { getHomeContent } from "@/shared/content/home";
+import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getLocalePath, isLocale } from "@/shared/config/site";
+import { LOCALES, type Locale } from "@/shared/i18n/types";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HomePage from "@/widgets/HomePage.astro";
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const routeLocale = Astro.params.locale;
+const locale = isLocale(routeLocale) ? routeLocale : "ko";
+const dictionary = getDictionary(locale as Locale);
+const content = getHomeContent(locale as Locale);
+---
+
+<BaseLayout locale={locale as Locale} dictionary={dictionary} canonicalPath={getLocalePath(locale as Locale)}>
+  <HomePage locale={locale as Locale} dictionary={dictionary} content={content} />
+</BaseLayout>

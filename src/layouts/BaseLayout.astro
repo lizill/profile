@@ -1,0 +1,50 @@
+---
+import "@/styles/global.css";
+import { LOCALES, type Dictionary, type Locale } from "@/shared/i18n/types";
+import { getLocalePath, withBasePath } from "@/shared/config/site";
+
+interface Props {
+  locale: Locale;
+  dictionary: Dictionary;
+  canonicalPath?: string;
+}
+
+const { locale, dictionary, canonicalPath = getLocalePath(locale) } = Astro.props;
+const canonicalUrl = Astro.site ? new URL(canonicalPath, Astro.site).toString() : canonicalPath;
+const defaultUrl = Astro.site
+  ? new URL(withBasePath("/"), Astro.site).toString()
+  : withBasePath("/");
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{dictionary.meta.title}</title>
+    <meta name="description" content={dictionary.meta.description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {
+      LOCALES.map((item) => (
+        <link
+          rel="alternate"
+          hreflang={item}
+          href={Astro.site ? new URL(getLocalePath(item), Astro.site).toString() : getLocalePath(item)}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={defaultUrl} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex min-h-screen flex-col bg-white font-sans text-ink antialiased">
+    <slot />
+    <script>
+      import "@/features/site-interactions";
+    </script>
+  </body>
+</html>

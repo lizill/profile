@@ -1,0 +1,20 @@
+---
+import type { Locale } from "@/shared/i18n/types";
+import { formatCareerYear, getCareerYear } from "@/shared/utils/career";
+
+interface Props {
+  locale: Locale;
+  startDate: string;
+}
+
+const { locale, startDate } = Astro.props;
+const careerYear = getCareerYear(startDate);
+---
+
+<span
+  class="js-career-year"
+  data-career-locale={locale}
+  data-career-start={startDate}
+>
+  {formatCareerYear(careerYear, locale)}
+</span>

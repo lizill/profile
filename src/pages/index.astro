@@ -1,0 +1,17 @@
+---
+import type { Locale } from "@/shared/i18n/types";
+import { DEFAULT_LOCALE } from "@/shared/i18n/types";
+import { getHomeContent } from "@/shared/content/home";
+import { getDictionary } from "@/shared/i18n/dictionaries";
+import { withBasePath } from "@/shared/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import HomePage from "@/widgets/HomePage.astro";
+
+const locale = DEFAULT_LOCALE as Locale;
+const dictionary = getDictionary(locale);
+const content = getHomeContent(locale);
+---
+
+<BaseLayout locale={locale} dictionary={dictionary} canonicalPath={withBasePath("/")}>
+  <HomePage locale={locale} dictionary={dictionary} content={content} />
+</BaseLayout>

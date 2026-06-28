@@ -1,0 +1,29 @@
+---
+import type { HomeContent } from "@/entities/home-content";
+import Footer from "@/widgets/Footer.astro";
+import Header from "@/widgets/Header.astro";
+import About from "@/widgets/About.astro";
+import Contact from "@/widgets/Contact.astro";
+import Hero from "@/widgets/Hero.astro";
+import Projects from "@/widgets/Projects.astro";
+import Skills from "@/widgets/Skills.astro";
+import type { Dictionary, Locale } from "@/shared/i18n/types";
+
+interface Props {
+  locale: Locale;
+  dictionary: Dictionary;
+  content: HomeContent;
+}
+
+const { locale, dictionary, content } = Astro.props;
+---
+
+<Header locale={locale} dictionary={dictionary} content={content} />
+<main class="flex-1">
+  <Hero locale={locale} dictionary={dictionary} content={content} />
+  <About locale={locale} dictionary={dictionary} content={content} />
+  <Skills dictionary={dictionary} skills={content.skills} />
+  <Projects dictionary={dictionary} projects={content.projects} />
+  <Contact dictionary={dictionary} contacts={content.contacts} />
+</main>
+<Footer dictionary={dictionary} />

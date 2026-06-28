@@ -1,0 +1,47 @@
+---
+import type { Skill } from "@/entities/skill/types";
+import type { Dictionary } from "@/shared/i18n/types";
+import InlineRichText from "@/shared/ui/InlineRichText.astro";
+import SectionEyebrow from "@/shared/ui/SectionEyebrow.astro";
+
+interface Props {
+  dictionary: Dictionary;
+  skills: Skill[];
+}
+
+const { dictionary, skills } = Astro.props;
+---
+
+<section id="skills" class="bg-slate-50 py-24">
+  <div class="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+    <div class="reveal">
+      <SectionEyebrow label={dictionary.sections.skills.eyebrow} richText={dictionary.sections.skills.eyebrowRichText} />
+      <h2 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <InlineRichText value={dictionary.sections.skills.titleRichText ?? dictionary.sections.skills.title} allowLinks={false} />
+      </h2>
+    </div>
+
+    <div class="reveal mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        skills.map((skill) => (
+          <article class="group rounded-3xl bg-white p-8 ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60">
+            <div
+              class:list={[
+                "flex h-12 w-12 items-center justify-center rounded-xl font-display text-xl font-extrabold text-white",
+                skill.badgeClass,
+              ]}
+            >
+              {skill.badge}
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold">
+              <InlineRichText value={skill.nameRichText ?? skill.name} allowLinks={false} />
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              <InlineRichText value={skill.descriptionRichText ?? skill.description} />
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

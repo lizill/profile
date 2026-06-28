@@ -1,0 +1,69 @@
+---
+import type { ContactItem } from "@/entities/home-content";
+import type { Dictionary } from "@/shared/i18n/types";
+import InlineRichText from "@/shared/ui/InlineRichText.astro";
+import SectionEyebrow from "@/shared/ui/SectionEyebrow.astro";
+
+interface Props {
+  dictionary: Dictionary;
+  contacts: ContactItem[];
+}
+
+const { dictionary, contacts } = Astro.props;
+---
+
+<section id="contact" class="bg-ink py-24 text-white">
+  <div class="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+    <div class="reveal max-w-2xl">
+      <SectionEyebrow
+        label={dictionary.sections.contact.eyebrow}
+        richText={dictionary.sections.contact.eyebrowRichText}
+        tone="dark"
+      />
+      <h2 class="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <InlineRichText
+          value={dictionary.sections.contact.titleRichText ?? dictionary.sections.contact.title}
+          allowLinks={false}
+        />
+      </h2>
+      <p class="mt-4 text-lg text-slate-300">
+        <InlineRichText
+          value={dictionary.sections.contact.descriptionRichText ?? dictionary.sections.contact.description}
+        />
+      </p>
+    </div>
+
+    <div class="reveal mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {
+        contacts.map((item) => (
+          <a
+            href={item.href}
+            target={item.external ? "_blank" : undefined}
+            rel={item.external ? "noopener noreferrer" : undefined}
+            class="group flex items-center justify-between rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/10"
+            aria-label={item.ariaLabel}
+          >
+            <span>
+              <span class="block text-sm font-semibold text-slate-400">
+                <InlineRichText value={item.labelRichText ?? item.label} allowLinks={false} />
+              </span>
+              <span class="mt-1 block font-display text-lg font-bold">
+                <InlineRichText value={item.valueRichText ?? item.value} allowLinks={false} />
+              </span>
+            </span>
+            <svg
+              class="h-5 w-5 text-slate-400 transition group-hover:translate-x-1 group-hover:text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

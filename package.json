@@ -1,0 +1,27 @@
+{
+  "name": "my-profile-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.8.1",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "pnpm sync:notion && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:protected": "pnpm build && pnpm protect:dist",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check": "pnpm sync:notion && ASTRO_TELEMETRY_DISABLED=1 astro check && tsc --noEmit -p tsconfig.scripts.json",
+    "protect:dist": "tsx scripts/protect-dist.ts",
+    "sync:notion": "tsx scripts/sync-notion-content.ts"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/tailwind": "^6.0.2",
+    "@notionhq/client": "^5.22.0",
+    "@types/node": "^22.20.0",
+    "astro": "^5.18.2",
+    "staticrypt": "^3.5.4",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3"
+  }
+}
