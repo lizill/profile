@@ -16,7 +16,12 @@ concurrency:
 
 jobs:
   build:
+    environment: github-pages
     runs-on: ubuntu-latest
+    env:
+      PUBLIC_DEFAULT_LOCALE: ${{ vars.PUBLIC_DEFAULT_LOCALE || 'ko' }}
+      PUBLIC_SITE_BASE_PATH: ${{ vars.PUBLIC_SITE_BASE_PATH || '/my-profile-site' }}
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://lizill.github.io' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,15 +43,39 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm build
+      - name: Validate build environment
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_SITE_TEXT_DATABASE_ID: ${{ secrets.NOTION_SITE_TEXT_DATABASE_ID }}
           NOTION_CONTENT_DATABASE_ID: ${{ secrets.NOTION_CONTENT_DATABASE_ID }}
-          PUBLIC_DEFAULT_LOCALE: ko
-          PUBLIC_SITE_BASE_PATH: /my-profile-site
-          PUBLIC_SITE_URL: https://lizill.github.io
+          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
+        run: |
+          required_vars=(
+            NOTION_TOKEN
+            NOTION_SITE_TEXT_DATABASE_ID
+            NOTION_CONTENT_DATABASE_ID
+            STATICRYPT_PASSWORD
+          )
+          missing=()
+
+          for name in "${required_vars[@]}"; do
+            if [[ -z "${!name}" ]]; then
+              missing+=("$name")
+            fi
+          done
+
+          if (( ${#missing[@]} > 0 )); then
+            printf '::error title=Missing GitHub secrets::Add these secrets to the github-pages environment or repository: %s\n' "${missing[*]}"
+            exit 1
+          fi
+
+      - name: Build
+        run: pnpm build:protected
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_SITE_TEXT_DATABASE_ID: ${{ secrets.NOTION_SITE_TEXT_DATABASE_ID }}
+          NOTION_CONTENT_DATABASE_ID: ${{ secrets.NOTION_CONTENT_DATABASE_ID }}
+          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
