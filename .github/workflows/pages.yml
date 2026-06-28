@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLIC_DEFAULT_LOCALE: ${{ vars.PUBLIC_DEFAULT_LOCALE || 'ko' }}
-      PUBLIC_SITE_BASE_PATH: ${{ vars.PUBLIC_SITE_BASE_PATH || '/my-profile-site' }}
+      PUBLIC_SITE_BASE_PATH: ${{ vars.PUBLIC_SITE_BASE_PATH || '/profile' }}
       PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://lizill.github.io' }}
     steps:
       - name: Checkout
@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
